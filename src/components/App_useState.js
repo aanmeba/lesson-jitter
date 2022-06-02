@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
 import MessageForm from "./MessageForm";
 import Messages from "./Messages";
@@ -13,49 +13,38 @@ import {
 } from "react-router-dom";
 import About from "./About";
 import NotFound from "./NotFound";
-import { reducer } from "../utils/reducer";
 
 const App = () => {
-  // useReducer handles all the states in the same object
-  const initialState = {
-    messageList: [],
-    loggedInUser: "",
-  };
-
-  // useReducer receives two arguments
-  // - reducer -> it is the function that is executed when...
-  // - state
-  // it returns an array with two elements
-  // - store -> actually that's the name for the state
-  // - dispatch -> is the function that triggers the reducer function, dispatch's argument is action
-  const [store, dispatch] = useReducer(reducer, initialState);
-  const { messageList, loggedInUser } = store;
+  const [loggedInUser, setLoggedInUser] = useState("");
+  const [messageList, setMessageList] = useState([]);
 
   const activateUser = (username) => {
-    dispatch({
-      type: "setLoggedInUser",
-      data: username,
-    });
+    setLoggedInUser(username);
   };
 
   const addMessage = (text) => {
-    // this logic can be in reducer under 'setMessageList / addMessage' cases
     const message = {
-      id: messageList[0].id + 1,
+      id: messageList[0].id + 1, // id: nextId(messageList),
       text: text,
       user: loggedInUser,
     };
-    dispatch({
-      type: "addMessage",
-      data: message,
-    });
+    setMessageList((messageList) => [message, ...messageList]);
   };
 
+  // function nextId(data) {
+  //   // first exclude the empty data case
+  //   if (data.length === 0) return 1;
+
+  //   // second handle if data is not empty
+  //   const sortData = data.sort((a, b) => a.id - b.id);
+  //   const nextId = sortData[sortData.length - 1].id + 1;
+
+  //   return nextId;
+  // }
+
   useEffect(() => {
-    dispatch({
-      type: "setMessageList",
-      data: initialMessageList,
-    });
+    // fetch need later
+    setMessageList(initialMessageList);
   }, []);
 
   return (
