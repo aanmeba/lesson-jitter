@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGlobalState } from "../utils/stateContext";
 
-const LoginForm = ({ activateUser }) => {
+const LoginForm = () => {
+  const { dispatch } = useGlobalState();
   const navigate = useNavigate();
-
   const initialFormData = {
     user: "",
     password: "",
@@ -15,7 +16,11 @@ const LoginForm = ({ activateUser }) => {
     console.log("you clicked submit");
     console.log(formData);
 
-    activateUser(formData.user);
+    // activateUser(formData.user);
+    dispatch({
+      type: "setLoggedInUser",
+      data: formData.user,
+    });
     setFormData(initialFormData); // cleaning up the input field
     navigate("/messages");
   };

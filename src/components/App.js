@@ -14,6 +14,7 @@ import {
 import About from "./About";
 import NotFound from "./NotFound";
 import { reducer } from "../utils/reducer";
+import { StateContext } from "../utils/stateContext";
 
 const App = () => {
   // useReducer handles all the states in the same object
@@ -29,27 +30,7 @@ const App = () => {
   // - store -> actually that's the name for the state
   // - dispatch -> is the function that triggers the reducer function, dispatch's argument is action
   const [store, dispatch] = useReducer(reducer, initialState);
-  const { messageList, loggedInUser } = store;
-
-  const activateUser = (username) => {
-    dispatch({
-      type: "setLoggedInUser",
-      data: username,
-    });
-  };
-
-  const addMessage = (text) => {
-    // this logic can be in reducer under 'setMessageList / addMessage' cases
-    const message = {
-      id: messageList[0].id + 1,
-      text: text,
-      user: loggedInUser,
-    };
-    dispatch({
-      type: "addMessage",
-      data: message,
-    });
-  };
+  const { loggedInUser } = store;
 
   useEffect(() => {
     dispatch({
@@ -62,43 +43,33 @@ const App = () => {
     <div>
       <h1>Jitter</h1>
 
-      {/*** Wrap all the components involved in the app's routing */}
-      <Router>
-        {/*** Navigation isn't a part of routes  */}
-        {/*** It is in the brower router because it uses the Link component */}
-        <Navigation loggedInUser={loggedInUser} activateUser={activateUser} />
-        <Routes>
-          <Route path="/" element={<Navigate to="messages" replace />} />
-          {/*** Nested Routes  */}
-          <Route path="messages">
-            <Route index element={<Messages messageList={messageList} />} />
-            <Route
-              path="new"
-              element={
-                loggedInUser ? (
-                  <MessageForm
-                    loggedInUser={loggedInUser}
-                    addMessage={addMessage}
-                  />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path=":messageId"
-              element={<MessageDetail messageList={messageList} />}
-            />
-          </Route>
-          <Route path="about" element={<About />} />
-          <Route
-            path="login"
-            element={<LoginForm activateUser={activateUser} />}
-          />
-          {/*** for everything else routes render NotFound component */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+      {/*** Wrap all the components that use global states like loggedInUser and messageList in the state context provider*/}
+      <StateContext.Provider value={{ store, dispatch }}>
+        {/*** Wrap all the components involved in the app's routing */}
+        <Router>
+          {/*** Navigation isn't a part of routes  */}
+          {/*** It is in the brower router because it uses the Link component */}
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<Navigate to="messages" replace />} />
+            {/*** Nested Routes  */}
+            <Route path="messages">
+              <Route index element={<Messages />} />
+              <Route
+                path="new"
+                element={
+                  loggedInUser ? <MessageForm /> : <Navigate to="/login" />
+                }
+              />
+              <Route path=":messageId" element={<MessageDetail />} />
+            </Route>
+            <Route path="about" element={<About />} />
+            <Route path="login" element={<LoginForm />} />
+            {/*** for everything else routes render NotFound component */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </StateContext.Provider>
     </div>
   );
 };

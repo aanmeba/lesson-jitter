@@ -1,13 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useGlobalState } from "../utils/stateContext";
 
-const Navigation = ({ loggedInUser, activateUser }) => {
+const Navigation = () => {
+  const { store, dispatch } = useGlobalState();
+  const { loggedInUser } = store;
+
   // Hooks should locate on top, not inside of functions things like that
   // Alternative of History in the version 5
   const navigate = useNavigate();
 
   const logout = (e) => {
     e.preventDefault();
-    activateUser("");
+    // activateUser("");
+    dispatch({
+      type: "setLoggedInUser",
+      data: "",
+    });
     navigate("/messages");
   };
 
