@@ -4,7 +4,7 @@ import MessageForm from "./MessageForm";
 import Messages from "./Messages";
 import MessageDetail from "./MessageDetail";
 import Navigation from "./Navigation";
-import initialMessageList from "../data/message-list.json";
+// import initialMessageList from "../data/message-list.json";
 import {
   BrowserRouter as Router,
   Route,
@@ -15,13 +15,16 @@ import About from "./About";
 import NotFound from "./NotFound";
 import { reducer } from "../utils/reducer";
 import { StateContext } from "../utils/stateContext";
+import { getMessages } from "../services/messagesServices";
+import SignupForm from "./SignupForm";
 // import axios from "axios";
 
 const App = () => {
   // useReducer handles all the states in the same object
   const initialState = {
     messageList: [],
-    loggedInUser: "",
+    loggedInUser: sessionStorage.getItem("username") || null,
+    token: sessionStorage.getItem("token") || null,
   };
 
   // useReducer receives two arguments
@@ -44,10 +47,15 @@ const App = () => {
     //     data: response.data,
     //   });
     // });
-    dispatch({
-      type: "setMessageList",
-      data: initialMessageList,
-    });
+    getMessages()
+      .then((messages) => {
+        dispatch({
+          type: "setMessageList",
+          // data: initialMessageList,
+          data: messages,
+        });
+      })
+      .catch((e) => console.log(e));
   }, []);
 
   return (
@@ -74,6 +82,7 @@ const App = () => {
             </Route>
             <Route path="about" element={<About />} />
             <Route path="login" element={<LoginForm />} />
+            <Route path="signup" element={<SignupForm />} />
             {/*** for everything else routes render NotFound component */}
             <Route path="*" element={<NotFound />} />
           </Routes>

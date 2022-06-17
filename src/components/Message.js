@@ -7,7 +7,8 @@ const Message = ({ message }) => {
       <Card>
         <CardContent>
           <Typography variant="h6">{message.text}</Typography>
-          <Typography>{message.user}</Typography>
+          <Typography>{message.username}</Typography>
+          <Typography variant="p">{message.posted}</Typography>
         </CardContent>
       </Card>
     </Link>

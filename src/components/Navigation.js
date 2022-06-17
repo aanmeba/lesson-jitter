@@ -12,10 +12,16 @@ const Navigation = () => {
 
   const logout = (e) => {
     e.preventDefault();
-    // activateUser("");
+    sessionStorage.clear();
+    // sessionStorage.removeItem("username");
+
     dispatch({
       type: "setLoggedInUser",
-      data: "",
+      data: null,
+    });
+    dispatch({
+      type: "setToken",
+      data: null,
     });
     navigate("/messages");
   };
@@ -39,7 +45,9 @@ const Navigation = () => {
             />
           )}
           {!loggedInUser && <Tab label="Login" component={Link} to="/login" />}
-          {!loggedInUser && <Tab label="Signup" component={Link} to="/login" />}
+          {!loggedInUser && (
+            <Tab label="Signup" component={Link} to="/signup" />
+          )}
         </Tabs>
       </Toolbar>
     </AppBar>

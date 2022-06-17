@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createMessage } from "../services/messagesServices";
 import { useGlobalState } from "../utils/stateContext";
 
 const MessageForm = () => {
   const { store, dispatch } = useGlobalState();
-  const { loggedInUser, messageList } = store;
+  const { loggedInUser } = store;
 
   const navigate = useNavigate();
   const initialFormData = {
@@ -27,27 +28,22 @@ const MessageForm = () => {
       console.log("empty message");
     } else {
       console.log(formData);
-      addMessage(formData.text);
+      addMessage(formData);
       cleanMessage();
       navigate("/messages");
     }
   };
 
-  const addMessage = (text) => {
-    // this logic can be in reducer under 'setMessageList / addMessage' cases
-    const message = {
-      id: messageList[0].id + 1,
-      text: text,
-      user: loggedInUser,
-    };
-    dispatch({
-      type: "addMessage",
-      data: message,
+  const addMessage = (data) => {
+    createMessage(data).then((message) => {
+      dispatch({
+        type: "addMessage",
+        data: message,
+      });
     });
   };
 
-  const cleanMessage = (e) => {
-    // e.preventDefault();
+  const cleanMessage = () => {
     setFormData(initialFormData);
   };
 
