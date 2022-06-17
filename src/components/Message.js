@@ -1,12 +1,16 @@
+import { Card, CardContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const Message = ({ message }) => {
   return (
-    <>
-      <h4>{message.text}</h4>
-      <p>{message.user}</p>
-      <Link to={`/messages/${message.id}`}>View detail</Link>
-    </>
+    <Link to={`${message.id}`} style={{ textDecoration: "none" }}>
+      <Card>
+        <CardContent>
+          <Typography variant="h6">{message.text}</Typography>
+          <Typography>{message.user}</Typography>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
