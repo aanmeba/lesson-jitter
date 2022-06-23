@@ -78,6 +78,7 @@ const App = () => {
                   loggedInUser ? <MessageForm /> : <Navigate to="/login" />
                 }
               />
+              <Route path="mymessages" element={<Messages />} />
               <Route path=":messageId" element={<MessageDetail />} />
             </Route>
             <Route path="about" element={<About />} />

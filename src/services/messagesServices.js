@@ -11,3 +11,13 @@ export async function createMessage(msg) {
   console.log(response.data);
   return response.data;
 }
+
+export async function getMyMessages() {
+  const response = await jitterAPI.get("/messages/mymessages");
+  return response.data;
+}
+
+export async function getMessagesByUser(username) {
+  const response = await jitterAPI.get(`/messages?username=${username}`);
+  return response.data;
+}

@@ -1,5 +1,6 @@
 import { AppBar, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { getMyMessages } from "../services/messagesServices";
 import { useGlobalState } from "../utils/stateContext";
 
 const Navigation = () => {
@@ -26,6 +27,18 @@ const Navigation = () => {
     navigate("/messages");
   };
 
+  const myMessages = () => {
+    getMyMessages()
+      .then((messages) => {
+        dispatch({
+          type: "setMessageList",
+          // data: initialMessageList,
+          data: messages,
+        });
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <AppBar position="sticky">
       <Typography variant="h3">Jitter</Typography>
@@ -35,6 +48,14 @@ const Navigation = () => {
           <Tab label="About" component={Link} to="/about" />
           {loggedInUser && (
             <Tab label="New Message" component={Link} to="/messages/new" />
+          )}
+          {loggedInUser && (
+            <Tab
+              label="My messages"
+              component={Link}
+              onClick={myMessages}
+              to="/messages/mymessages"
+            />
           )}
           {loggedInUser && (
             <Tab
