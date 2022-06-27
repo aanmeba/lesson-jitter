@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const jitterAPI = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
 
 jitterAPI.interceptors.request.use((req) => {
