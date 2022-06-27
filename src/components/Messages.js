@@ -52,7 +52,7 @@ const Messages = () => {
         })
         .catch((e) => console.log(e));
     }
-  }, [location]); // it will trigger everytime location changes, checking the if statement
+  }, [location]); // eslint-disable-line
 
   return (
     <>
