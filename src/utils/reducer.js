@@ -14,9 +14,6 @@
 // the function returns the updated state
 
 export const reducer = (state, action) => {
-  console.log(state);
-  console.log(action);
-
   switch (action.type) {
     case "cleanState": {
       // State goes back to default values
@@ -44,6 +41,13 @@ export const reducer = (state, action) => {
       return {
         ...state,
         loggedInUser: action.data,
+      };
+    }
+    case "setToken": {
+      // updates the token value
+      return {
+        ...state,
+        token: action.data,
       };
     }
     default:

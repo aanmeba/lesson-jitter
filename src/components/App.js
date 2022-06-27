@@ -1,10 +1,10 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import LoginForm from "./LoginForm";
 import MessageForm from "./MessageForm";
 import Messages from "./Messages";
 import MessageDetail from "./MessageDetail";
 import Navigation from "./Navigation";
-import initialMessageList from "../data/message-list.json";
+// import initialMessageList from "../data/message-list.json";
 import {
   BrowserRouter as Router,
   Route,
@@ -15,12 +15,16 @@ import About from "./About";
 import NotFound from "./NotFound";
 import { reducer } from "../utils/reducer";
 import { StateContext } from "../utils/stateContext";
+import SignupForm from "./SignupForm";
+import { getMessages } from "../services/messagesServices";
+// import axios from "axios";
 
 const App = () => {
   // useReducer handles all the states in the same object
   const initialState = {
     messageList: [],
-    loggedInUser: "",
+    loggedInUser: sessionStorage.getItem("username") || null,
+    token: sessionStorage.getItem("token") || null,
   };
 
   // useReducer receives two arguments
@@ -33,16 +37,18 @@ const App = () => {
   const { loggedInUser } = store;
 
   useEffect(() => {
-    dispatch({
-      type: "setMessageList",
-      data: initialMessageList,
-    });
+    getMessages()
+      .then((messages) => {
+        dispatch({
+          type: "setMessageList",
+          data: messages,
+        });
+      })
+      .catch((e) => console.log(e));
   }, []);
 
   return (
     <div>
-      <h1>Jitter</h1>
-
       {/*** Wrap all the components that use global states like loggedInUser and messageList in the state context provider*/}
       <StateContext.Provider value={{ store, dispatch }}>
         {/*** Wrap all the components involved in the app's routing */}
@@ -62,9 +68,12 @@ const App = () => {
                 }
               />
               <Route path=":messageId" element={<MessageDetail />} />
+              <Route path="mymessages" element={<Messages />} />
+              <Route path="user/:username" element={<Messages />} />
             </Route>
             <Route path="about" element={<About />} />
             <Route path="login" element={<LoginForm />} />
+            <Route path="signup" element={<SignupForm />} />
             {/*** for everything else routes render NotFound component */}
             <Route path="*" element={<NotFound />} />
           </Routes>
