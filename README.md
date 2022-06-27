@@ -1,6 +1,6 @@
 # Messaging App a.k.a. Jitter
 
-This app is created with React along with Rails API, [lesson-jitter-api](https://github.com/aanmeba/lesson-jitter-api).
+This app is created with React along with REST API built with Ruby on Rails, [lesson-jitter-api](https://github.com/aanmeba/lesson-jitter-api).
 
 [Here's the deployed app link](https://staging-fx2-jitterja.netlify.app/messages)
 
