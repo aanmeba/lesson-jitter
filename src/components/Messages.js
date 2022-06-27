@@ -14,8 +14,6 @@ const Messages = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
   const params = useParams();
-  console.log(location);
-  console.log(params);
 
   useEffect(() => {
     setError(null);

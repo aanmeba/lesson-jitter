@@ -1,6 +1,5 @@
 import { AppBar, Tab, Tabs, Toolbar, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-// import { getMyMessages } from "../services/messagesServices";
 import { useGlobalState } from "../utils/stateContext";
 
 const Navigation = () => {
@@ -26,18 +25,6 @@ const Navigation = () => {
     });
     navigate("/messages");
   };
-
-  // const myMessages = () => {
-  //   getMyMessages()
-  //     .then((messages) => {
-  //       dispatch({
-  //         type: "setMessageList",
-  //         // data: initialMessageList,
-  //         data: messages,
-  //       });
-  //     })
-  //     .catch((e) => console.log(e));
-  // };
 
   return (
     <AppBar position="sticky">

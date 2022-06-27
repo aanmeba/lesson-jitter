@@ -17,7 +17,6 @@ import { reducer } from "../utils/reducer";
 import { StateContext } from "../utils/stateContext";
 import SignupForm from "./SignupForm";
 import { getMessages } from "../services/messagesServices";
-// import axios from "axios";
 
 const App = () => {
   // useReducer handles all the states in the same object
