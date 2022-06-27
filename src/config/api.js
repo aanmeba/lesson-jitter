@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const jitterAPI = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL,
+  baseURL: "https://lesson-jitter-backend.herokuapp.com",
 });
 
 jitterAPI.interceptors.request.use((req) => {
