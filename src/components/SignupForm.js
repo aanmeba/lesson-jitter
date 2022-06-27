@@ -15,27 +15,47 @@ const SignupForm = () => {
     password_confirmation: "",
   };
   const [formData, setFormData] = useState(initialFormData);
+  const [error, setError] = useState(null);
+  // const [error, setError] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     signUp(formData)
-      .then(({ username, jwt }) => {
-        sessionStorage.setItem("username", username);
-        sessionStorage.setItem("token", jwt);
-        dispatch({
-          type: "setLoggedInUser",
-          data: username,
-        });
-        dispatch({
-          type: "setToken",
-          data: jwt,
-        });
-      })
-      .catch((e) => console.log(e.response.data));
+      .then((user) => {
+        console.log(user);
+        let errorMessage = "";
+        if (user.error) {
+          console.log(user.error);
+          // convert the object into a string
+          // const { username, email } = user.error;
+          // setError({ username: username, email: email });
 
-    setFormData(initialFormData); // cleaning up the input field
-    navigate("/messages");
+          Object.keys(user.error).forEach((key) => {
+            // console.log(key, user.error[key]);
+            errorMessage = errorMessage.concat(
+              "\n",
+              `${key} ${user.error[key]}`
+            );
+          });
+          setError(errorMessage);
+        } else {
+          setError(null);
+          sessionStorage.setItem("username", user.username);
+          sessionStorage.setItem("token", user.jwt);
+          dispatch({
+            type: "setLoggedInUser",
+            data: user.username,
+          });
+          dispatch({
+            type: "setToken",
+            data: user.jwt,
+          });
+          setFormData(initialFormData); // cleaning up the input field
+          navigate("/messages");
+        }
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleFormData = (e) => {
@@ -48,6 +68,11 @@ const SignupForm = () => {
   return (
     <>
       <Typography variant="h4">Register User</Typography>
+      {error && <p>{error}</p>}
+      {/* {error &&
+        (error.username || error.email) &&
+        ((error.username && <p>username {error.username}</p>) ||
+          (error.email && <p>email {error.email}</p>))} */}
       <form onSubmit={handleSubmit}>
         <div>
           <InputLabel>Username: </InputLabel>

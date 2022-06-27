@@ -3,15 +3,18 @@ import { Link } from "react-router-dom";
 
 const Message = ({ message }) => {
   return (
-    <Link to={`${message.id}`} style={{ textDecoration: "none" }}>
-      <Card>
-        <CardContent>
+    <Card>
+      <CardContent>
+        {/* relative path - Link to={`${message.id}`} */}
+        <Link to={`/messages/${message.id}`} style={{ textDecoration: "none" }}>
           <Typography variant="h6">{message.text}</Typography>
+        </Link>
+        <Link to={`/messages/user/${message.username}`}>
           <Typography>{message.username}</Typography>
-          <Typography variant="p">{message.posted}</Typography>
-        </CardContent>
-      </Card>
-    </Link>
+        </Link>
+        <Typography variant="p">{message.posted}</Typography>
+      </CardContent>
+    </Card>
   );
 };
 

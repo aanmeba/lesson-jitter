@@ -30,7 +30,6 @@ const MessageForm = () => {
       console.log(formData);
       addMessage(formData);
       cleanMessage();
-      navigate("/messages");
     }
   };
 
@@ -40,6 +39,7 @@ const MessageForm = () => {
         type: "addMessage",
         data: message,
       });
+      navigate("/messages");
     });
   };
 

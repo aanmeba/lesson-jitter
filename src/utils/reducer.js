@@ -14,9 +14,6 @@
 // the function returns the updated state
 
 export const reducer = (state, action) => {
-  console.log(state);
-  console.log(action);
-
   switch (action.type) {
     case "cleanState": {
       // State goes back to default values

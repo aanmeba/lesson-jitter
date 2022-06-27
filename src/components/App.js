@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import LoginForm from "./LoginForm";
 import MessageForm from "./MessageForm";
 import Messages from "./Messages";
@@ -15,8 +15,8 @@ import About from "./About";
 import NotFound from "./NotFound";
 import { reducer } from "../utils/reducer";
 import { StateContext } from "../utils/stateContext";
-import { getMessages } from "../services/messagesServices";
 import SignupForm from "./SignupForm";
+import { getMessages } from "../services/messagesServices";
 // import axios from "axios";
 
 const App = () => {
@@ -37,21 +37,10 @@ const App = () => {
   const { loggedInUser } = store;
 
   useEffect(() => {
-    // fetch("http://localhost:4000/messages")
-    //   .then((response) => response.json())
-    //   .then((data) => console.log(data));
-    // axios.get("http://localhost:4000/messages").then((response) => {
-    //   console.log(response.data);
-    //   dispatch({
-    //     type: "setMessageList",
-    //     data: response.data,
-    //   });
-    // });
     getMessages()
       .then((messages) => {
         dispatch({
           type: "setMessageList",
-          // data: initialMessageList,
           data: messages,
         });
       })
@@ -78,8 +67,9 @@ const App = () => {
                   loggedInUser ? <MessageForm /> : <Navigate to="/login" />
                 }
               />
-              <Route path="mymessages" element={<Messages />} />
               <Route path=":messageId" element={<MessageDetail />} />
+              <Route path="mymessages" element={<Messages />} />
+              <Route path="user/:username" element={<Messages />} />
             </Route>
             <Route path="about" element={<About />} />
             <Route path="login" element={<LoginForm />} />
